@@ -2,229 +2,353 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Keuanganku">
 <meta name="theme-color" content="#0f172a">
 <title>Keuanganku</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f172a;--bg2:#1e293b;--bg3:#273548;--card:#1e293b;
-  --border:rgba(255,255,255,0.08);--text:#f1f5f9;--muted:#94a3b8;
-  --saldo:#38bdf8;--saldo-dim:rgba(56,189,248,0.13);
-  --cash:#34d399;--cash-dim:rgba(52,211,153,0.13);
-  --danger:#f87171;--danger-dim:rgba(248,113,113,0.13);
-  --green:#4ade80;--green-dim:rgba(74,222,128,0.13);
-  --radius:16px;--radius-sm:10px;
+  --bg:#0f172a;--bg2:#1e293b;--bg3:#2d3f55;--card:#1a2744;
+  --border:rgba(255,255,255,0.07);--text:#f1f5f9;--muted:#7c93b0;
+  --saldo:#38bdf8;--saldo-dim:rgba(56,189,248,0.12);
+  --cash:#34d399;--cash-dim:rgba(52,211,153,0.12);
+  --danger:#f87171;--danger-dim:rgba(248,113,113,0.12);
+  --green:#4ade80;--green-dim:rgba(74,222,128,0.12);
+  --r:14px;--rsm:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;overscroll-behavior:none}
-.app{display:flex;flex-direction:column;height:100dvh;max-width:480px;margin:0 auto}
-.header{padding:48px 16px 10px;background:var(--bg);flex-shrink:0}
-.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.app-title{font-size:21px;font-weight:700;letter-spacing:-0.5px}
-.app-title span{color:var(--saldo)}
-.tab-switch{display:flex;background:var(--bg2);border-radius:50px;padding:3px;gap:2px}
-.tab-btn{padding:6px 16px;border-radius:50px;border:none;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);background:transparent}
-.tab-btn.act-s{background:var(--saldo);color:#0f172a}
-.tab-btn.act-c{background:var(--cash);color:#0f172a}
 
-.summary{background:var(--card);border-radius:var(--radius);padding:14px 16px;border:1px solid var(--border);margin-bottom:10px}
-.sum-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:11px}
-.bal-label{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:3px}
-.bal-value{font-size:26px;font-weight:700;letter-spacing:-1px}
+/* ── App shell ── */
+.app{display:flex;flex-direction:column;height:100dvh;max-width:430px;margin:0 auto;position:relative}
+
+/* ── Top bar ── */
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:52px 20px 16px;
+  background:linear-gradient(180deg,#0a1628 0%,var(--bg) 100%);
+  flex-shrink:0;
+}
+.app-title{font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.app-title span{color:var(--saldo)}
+.tab-switch{display:flex;background:rgba(255,255,255,0.06);border-radius:50px;padding:3px;gap:2px;border:1px solid var(--border)}
+.tab-btn{padding:7px 18px;border-radius:50px;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--muted);background:transparent;letter-spacing:0.2px}
+.tab-btn.act-s{background:var(--saldo);color:#0a1628;box-shadow:0 2px 12px rgba(56,189,248,0.35)}
+.tab-btn.act-c{background:var(--cash);color:#0a1628;box-shadow:0 2px 12px rgba(52,211,153,0.35)}
+
+/* ── Scrollable content ── */
+.content{flex:1;overflow-y:auto;padding:0 16px 100px;scrollbar-width:none}
+.content::-webkit-scrollbar{display:none}
+
+/* ── Summary card ── */
+.summary{
+  background:linear-gradient(135deg,#1a2f52 0%,#162440 100%);
+  border-radius:20px;padding:18px 20px;border:1px solid rgba(56,189,248,0.15);
+  margin-bottom:14px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+}
+.summary.cash-mode{
+  background:linear-gradient(135deg,#0f3028 0%,#0d2620 100%);
+  border-color:rgba(52,211,153,0.15);
+}
+.sum-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.bal-label{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:5px;letter-spacing:0.5px;text-transform:uppercase}
+.bal-value{font-size:30px;font-weight:800;letter-spacing:-1.5px;line-height:1}
 .bal-s{color:var(--saldo)}.bal-c{color:var(--cash)}.bal-neg{color:var(--danger)}
 .sum-right{text-align:right}
-.sum-right-label{font-size:11px;color:var(--muted);margin-bottom:3px}
-.sum-right-val{font-size:14px;font-weight:700}
+.sum-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,0.07);border-radius:8px;
+  padding:6px 10px;border:1px solid var(--border);
+}
+.sum-badge-label{font-size:10px;color:var(--muted);display:block;margin-bottom:2px}
+.sum-badge-val{font-size:13px;font-weight:700}
 .sum-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat{background:var(--bg3);border-radius:var(--radius-sm);padding:9px 11px}
-.stat-label{font-size:11px;color:var(--muted);margin-bottom:2px}
-.stat-val{font-size:14px;font-weight:700}
+.stat{background:rgba(0,0,0,0.2);border-radius:10px;padding:10px 12px;border:1px solid var(--border)}
+.stat-label{font-size:10px;color:var(--muted);margin-bottom:3px;font-weight:600;letter-spacing:0.3px}
+.stat-val{font-size:15px;font-weight:700}
 
-/* Tambah kas */
-.kas-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 13px;margin-bottom:10px}
-.kas-sec-title{font-size:12px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:5px}
-.kas-row{display:flex;gap:6px;align-items:center}
-.kas-row input{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:13px;padding:8px 9px;border-radius:8px;-webkit-appearance:none;min-width:0}
-.kas-row input:focus{outline:none}
-.kas-row input.fi-s:focus{border-color:var(--saldo)}
-.kas-row input.fi-c:focus{border-color:var(--cash)}
-.kas-add-btn{padding:8px 13px;border-radius:8px;border:none;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.kas-add-btn.s{background:var(--saldo);color:#0f172a}
-.kas-add-btn.c{background:var(--cash);color:#0f172a}
-.kas-add-btn:active{transform:scale(0.95)}
-.kas-hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
+/* ── Kas section ── */
+.kas-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;margin-bottom:12px;
+}
+.kas-card-title{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.kas-inputs{display:flex;gap:8px;align-items:stretch}
+.kas-inputs input{
+  flex:1;background:var(--bg3);border:1.5px solid var(--border);
+  color:var(--text);font-family:inherit;font-size:14px;
+  padding:10px 12px;border-radius:var(--rsm);-webkit-appearance:none;
+  transition:border-color .2s;min-width:0;
+}
+.kas-inputs input:focus{outline:none}
+.kas-inputs input.fi-s:focus{border-color:var(--saldo)}
+.kas-inputs input.fi-c:focus{border-color:var(--cash)}
+.kas-add-btn{
+  padding:10px 16px;border-radius:var(--rsm);border:none;
+  font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;
+  white-space:nowrap;flex-shrink:0;letter-spacing:0.2px;
+  transition:all .15s;
+}
+.kas-add-btn.s{background:var(--saldo);color:#0a1628;box-shadow:0 2px 10px rgba(56,189,248,0.3)}
+.kas-add-btn.c{background:var(--cash);color:#0a1628;box-shadow:0 2px 10px rgba(52,211,153,0.3)}
+.kas-add-btn:active{transform:scale(0.95);opacity:0.9}
+.kas-hint{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;padding:0 2px}
 
-/* Filter chips */
-.filter-bar{display:flex;gap:6px;align-items:center;margin-bottom:8px}
-.filter-scroll{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;flex:1;scrollbar-width:none}
+/* ── Filter chips ── */
+.filter-wrap{margin-bottom:10px}
+.filter-label-txt{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px}
+.filter-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 .filter-scroll::-webkit-scrollbar{display:none}
-.chip{padding:5px 11px;border-radius:50px;border:1px solid var(--border);background:var(--bg2);font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.chip{
+  padding:6px 14px;border-radius:50px;border:1.5px solid var(--border);
+  background:var(--bg2);font-size:12px;font-weight:600;color:var(--muted);
+  cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0;
+}
 .chip.act-s{background:var(--saldo-dim);border-color:var(--saldo);color:var(--saldo)}
 .chip.act-c{background:var(--cash-dim);border-color:var(--cash);color:var(--cash)}
 
-/* List */
-.list-area{flex:1;overflow-y:auto;padding:0 16px 90px;scrollbar-width:none}
-.list-area::-webkit-scrollbar{display:none}
+/* ── Section label ── */
+.sec-label{
+  font-size:10px;font-weight:700;color:var(--muted);
+  letter-spacing:0.6px;text-transform:uppercase;
+  padding:10px 2px 6px;
+}
 
-/* Entry rows */
-.entry{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--card);border-radius:var(--radius-sm);margin-bottom:4px;border:1px solid var(--border)}
-.entry-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+/* ── Entry rows ── */
+.entry{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 13px;background:var(--bg2);
+  border-radius:var(--rsm);margin-bottom:5px;
+  border:1px solid var(--border);
+  transition:background .15s;
+}
+.entry:active{background:var(--bg3)}
+.entry-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
 .icon-in{background:var(--green-dim)}
-.icon-out{background:var(--bg3)}
+.icon-out{background:rgba(255,255,255,0.04)}
 .entry-info{flex:1;min-width:0}
-.entry-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.entry-sub{font-size:11px;margin-top:1px;font-weight:500;color:var(--muted)}
+.entry-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.entry-sub{font-size:11px;font-weight:500;color:var(--muted)}
 .entry-right{text-align:right;flex-shrink:0}
-.entry-amount{font-size:13px;font-weight:700}
-.amount-in{color:var(--green)}
-.amount-out{color:var(--danger)}
-.del-btn{width:26px;height:26px;border-radius:8px;border:none;background:var(--danger-dim);color:var(--danger);cursor:pointer;font-size:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.del-btn:active{transform:scale(0.9)}
+.entry-amount{font-size:14px;font-weight:700}
+.amt-in{color:var(--green)}.amt-out{color:var(--danger)}
+.del-btn{
+  width:30px;height:30px;border-radius:8px;border:none;
+  background:var(--danger-dim);color:var(--danger);
+  cursor:pointer;font-size:15px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.del-btn:active{transform:scale(0.9);background:var(--danger);color:#fff}
 
-/* Date header */
-.date-hdr{display:flex;justify-content:space-between;align-items:center;padding:10px 2px 5px;border-bottom:1px solid var(--border);margin-bottom:5px;margin-top:4px}
-.date-hdr-l{font-size:12px;font-weight:600;color:var(--muted)}
-.date-hdr-r{font-size:12px;font-weight:700}
+/* kas awal footer */
+.kas-awal-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 12px;background:rgba(255,255,255,0.03);
+  border-radius:8px;margin:4px 0 8px;border:1px solid var(--border);
+  font-size:12px;
+}
 
-/* All-view row */
-.all-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--card);border-radius:var(--radius-sm);margin-bottom:4px;border:1px solid var(--border);cursor:pointer;transition:background .15s}
+/* ── All-view rows ── */
+.all-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;background:var(--bg2);
+  border-radius:var(--rsm);margin-bottom:5px;
+  border:1px solid var(--border);cursor:pointer;transition:all .15s;
+}
 .all-row:active{background:var(--bg3)}
-.all-row-left{}
-.all-row-date{font-size:13px;font-weight:600}
-.all-row-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.all-row-date{font-size:13px;font-weight:700;margin-bottom:3px}
+.all-row-sub{font-size:11px;color:var(--muted)}
 .all-row-right{text-align:right}
-.all-row-sisa{font-size:14px;font-weight:700}
-.all-row-arrow{font-size:12px;color:var(--muted);margin-top:2px}
+.all-row-sisa{font-size:15px;font-weight:800;letter-spacing:-0.5px}
+.all-row-hint{font-size:10px;color:var(--muted);margin-top:2px}
 
-.empty{text-align:center;padding:40px 16px}
-.empty-icon{font-size:38px;margin-bottom:10px}
-.empty-text{font-size:14px;color:var(--muted);line-height:1.6}
+/* ── Empty state ── */
+.empty{text-align:center;padding:48px 20px}
+.empty-icon{font-size:44px;margin-bottom:12px}
+.empty-text{font-size:14px;color:var(--muted);line-height:1.7}
 
-/* FAB */
-.fab{position:fixed;bottom:24px;right:calc(50% - 224px);width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;color:#0f172a;transition:all .2s;z-index:100}
-.fab.s{background:var(--saldo);box-shadow:0 4px 20px rgba(56,189,248,0.4)}
-.fab.c{background:var(--cash);box-shadow:0 4px 20px rgba(52,211,153,0.4)}
-.fab:active{transform:scale(0.92)}
+/* ── FAB — center bottom ── */
+.fab-wrap{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:430px;
+  padding:12px 20px 28px;
+  background:linear-gradient(0deg,var(--bg) 60%,transparent);
+  display:flex;justify-content:center;
+  pointer-events:none;z-index:100;
+}
+.fab{
+  width:56px;height:56px;border-radius:50%;border:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:28px;color:#0a1628;font-weight:700;
+  transition:all .2s;pointer-events:all;
+  box-shadow:0 4px 24px rgba(0,0,0,0.5);
+}
+.fab.s{background:var(--saldo);box-shadow:0 4px 24px rgba(56,189,248,0.45)}
+.fab.c{background:var(--cash);box-shadow:0 4px 24px rgba(52,211,153,0.45)}
+.fab:active{transform:scale(0.9)}
 
-/* Bottom sheet */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(4px)}
+/* ── Bottom sheet ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(6px)}
 .overlay.open{opacity:1;pointer-events:all}
-.sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:100%;max-width:480px;background:var(--bg2);border-radius:24px 24px 0 0;padding:12px 20px 36px;z-index:300;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sheet{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);
+  width:100%;max-width:430px;
+  background:var(--bg2);border-radius:24px 24px 0 0;
+  padding:12px 20px 40px;z-index:300;
+  transition:transform .32s cubic-bezier(.4,0,.2,1);
+  border-top:1px solid rgba(255,255,255,0.08);
+}
 .sheet.open{transform:translateX(-50%) translateY(0)}
-.sheet-handle{width:36px;height:4px;background:var(--bg3);border-radius:2px;margin:0 auto 16px}
-.sheet-title{font-size:16px;font-weight:700;margin-bottom:14px;text-align:center}
-.field{margin-bottom:12px}
-.field label{font-size:12px;color:var(--muted);font-weight:600;display:block;margin-bottom:5px}
-.field input{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:15px;padding:12px 14px;border-radius:var(--radius-sm);-webkit-appearance:none}
+.sheet-handle{width:40px;height:4px;background:rgba(255,255,255,0.12);border-radius:2px;margin:0 auto 18px}
+.sheet-title{font-size:17px;font-weight:800;margin-bottom:16px;text-align:center;letter-spacing:-0.3px}
+.field{margin-bottom:13px}
+.field label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase}
+.field input{
+  width:100%;background:var(--bg3);border:1.5px solid var(--border);
+  color:var(--text);font-family:inherit;font-size:15px;
+  padding:13px 15px;border-radius:var(--rsm);-webkit-appearance:none;transition:border-color .2s;
+}
 .field input:focus{outline:none}
-.fi-s:focus{border-color:var(--saldo)}.fi-c:focus{border-color:var(--cash)}
-.save-btn{width:100%;padding:14px;border-radius:var(--radius-sm);border:none;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px}
-.save-btn.s{background:var(--saldo);color:#0f172a}
-.save-btn.c{background:var(--cash);color:#0f172a}
-.save-btn:active{transform:scale(0.97)}
+.field input.fi-s:focus{border-color:var(--saldo)}
+.field input.fi-c:focus{border-color:var(--cash)}
+.save-btn{
+  width:100%;padding:15px;border-radius:var(--rsm);border:none;
+  font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;
+  margin-top:6px;letter-spacing:0.3px;transition:all .15s;
+}
+.save-btn.s{background:var(--saldo);color:#0a1628;box-shadow:0 4px 16px rgba(56,189,248,0.35)}
+.save-btn.c{background:var(--cash);color:#0a1628;box-shadow:0 4px 16px rgba(52,211,153,0.35)}
+.save-btn:active{transform:scale(0.98);opacity:0.9}
 
-.banner{margin-bottom:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 13px;display:flex;align-items:center;gap:9px}
-.banner-text{flex:1;font-size:12px;color:var(--muted);line-height:1.4}
+/* ── Install banner ── */
+.banner{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--rsm);padding:10px 14px;
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+}
+.banner-text{flex:1;font-size:12px;color:var(--muted);line-height:1.5}
 .banner-text strong{color:var(--text)}
-.banner-x{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer}
-
-.section-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;padding:4px 2px 4px;margin-top:2px}
+.banner-x{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:2px}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="header">
-    <div class="header-top">
-      <div class="app-title">Keuangan<span>ku</span></div>
-      <div class="tab-switch">
-        <button class="tab-btn act-s" id="tab-s" onclick="switchTab('saldo')">Saldo</button>
-        <button class="tab-btn" id="tab-c" onclick="switchTab('cash')">Cash</button>
-      </div>
-    </div>
 
-    <div class="summary">
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="app-title">💰 Keuangan<span>ku</span></div>
+    <div class="tab-switch">
+      <button class="tab-btn act-s" id="tab-s" onclick="switchTab('saldo')">Saldo</button>
+      <button class="tab-btn" id="tab-c" onclick="switchTab('cash')">Cash</button>
+    </div>
+  </div>
+
+  <!-- Scrollable content -->
+  <div class="content" id="content">
+
+    <!-- Summary -->
+    <div class="summary" id="summary">
       <div class="sum-top">
         <div>
           <div class="bal-label" id="sum-label">Sisa Saldo</div>
           <div class="bal-value bal-s" id="sum-sisa">Rp 0</div>
         </div>
         <div class="sum-right">
-          <div class="sum-right-label" id="sum-awal-label">Kas masuk hari ini</div>
-          <div class="sum-right-val" id="sum-awal-val" style="color:var(--saldo)">Rp 0</div>
+          <div class="sum-badge">
+            <div>
+              <span class="sum-badge-label" id="sum-awal-label">Kas Masuk</span>
+              <div class="sum-badge-val" id="sum-awal-val" style="color:var(--saldo)">Rp 0</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="sum-row">
-        <div class="stat"><div class="stat-label">💸 Total Keluar</div><div class="stat-val" id="sum-keluar" style="color:var(--danger)">Rp 0</div></div>
-        <div class="stat"><div class="stat-label">📅 Transaksi</div><div class="stat-val" id="sum-trx" style="color:var(--muted)">0 item</div></div>
+        <div class="stat">
+          <div class="stat-label">💸 Total Keluar</div>
+          <div class="stat-val" id="sum-keluar" style="color:var(--danger)">Rp 0</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">🧾 Transaksi</div>
+          <div class="stat-val" id="sum-trx" style="color:var(--muted)">0 item</div>
+        </div>
       </div>
     </div>
 
-    <div class="kas-section">
-      <div class="kas-sec-title"><span id="kas-icon">💳</span><span id="kas-title">Tambah Saldo / Pemasukan</span></div>
-      <div class="kas-row">
+    <!-- Tambah kas -->
+    <div class="kas-card">
+      <div class="kas-card-title"><span id="kas-icon">💳</span> <span id="kas-title">Tambah Pemasukan</span></div>
+      <div class="kas-inputs">
         <input type="date" id="kas-tgl" class="fi-s">
         <input type="number" id="kas-jml" placeholder="Jumlah (Rp)" inputmode="numeric" class="fi-s">
-        <button class="kas-add-btn s" id="kas-btn" onclick="addKas()">+ Kas</button>
+        <button class="kas-add-btn s" id="kas-btn" onclick="addKas()">＋ Kas</button>
       </div>
       <div class="kas-hint" id="kas-hint">Sisa hari sebelumnya otomatis terbawa. Riwayat pemasukan bisa dihapus jika salah input.</div>
     </div>
 
-    <div class="filter-bar">
-      <div style="font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0">📆</div>
+    <!-- Install banner -->
+    <div id="install-banner" class="banner" style="display:none">
+      <div style="font-size:20px">📲</div>
+      <div class="banner-text"><strong>Simpan ke homescreen!</strong><br>Chrome → ⋮ → Add to Home Screen</div>
+      <button class="banner-x" onclick="document.getElementById('install-banner').style.display='none'">✕</button>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-wrap">
+      <div class="filter-label-txt">Filter Tanggal</div>
       <div class="filter-scroll" id="filter-chips"></div>
     </div>
 
-    <div id="install-banner" class="banner" style="display:none">
-      <div style="font-size:18px">📲</div>
-      <div class="banner-text"><strong>Simpan ke homescreen!</strong><br>Tap Share → "Add to Home Screen"</div>
-      <button class="banner-x" onclick="document.getElementById('install-banner').style.display='none'">✕</button>
-    </div>
-  </div>
+    <!-- List -->
+    <div id="list-area"></div>
 
-  <div class="list-area" id="list-area"></div>
+  </div><!-- end content -->
 </div>
 
-<button class="fab s" id="fab" onclick="openSheet()">＋</button>
+<!-- FAB -->
+<div class="fab-wrap">
+  <button class="fab s" id="fab" onclick="openSheet()">＋</button>
+</div>
+
+<!-- Overlay & Sheet -->
 <div class="overlay" id="overlay" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet">
   <div class="sheet-handle"></div>
   <div class="sheet-title" id="sheet-title">Tambah Pengeluaran</div>
-  <div class="field"><label>TANGGAL</label><input type="date" id="inp-tgl" class="fi-s"></div>
-  <div class="field"><label>ITEM / KETERANGAN</label><input type="text" id="inp-item" placeholder="Contoh: Bayar listrik" class="fi-s"></div>
-  <div class="field"><label>HARGA (Rp)</label><input type="number" id="inp-harga" placeholder="0" inputmode="numeric" class="fi-s"></div>
+  <div class="field"><label>Tanggal</label><input type="date" id="inp-tgl" class="fi-s"></div>
+  <div class="field"><label>Item / Keterangan</label><input type="text" id="inp-item" placeholder="Contoh: Bayar listrik" class="fi-s"></div>
+  <div class="field"><label>Harga (Rp)</label><input type="number" id="inp-harga" placeholder="0" inputmode="numeric" class="fi-s"></div>
   <button class="save-btn s" id="save-btn" onclick="addEntry()">Simpan</button>
 </div>
 
 <script>
-const ICONS=['🛒','🍜','🚗','💊','🏠','👕','📱','⚡','🎮','🎁','✈️','🐾','🧾','☕','🧴','🎓','🏥','🍕'];
-
+const ICONS=['🛒','🍜','🚗','💊','🏠','👕','📱','⚡','🎮','🎁','✈️','🐾','🧾','☕','🧴','🎓','🏥','🍕','🎵','🔧'];
 let tab='saldo', filter='all';
-
-// data[tab]    = [{id, tgl, item, harga}]          ← pengeluaran
-// income[tab]  = [{id, tgl, jumlah, catatan}]      ← pemasukan (bisa dihapus)
 let data={saldo:[],cash:[]};
 let income={saldo:[],cash:[]};
 
-/* ── Storage ── */
 function load(){
   try{
     ['saldo','cash'].forEach(t=>{
-      const d=localStorage.getItem('keu5_out_'+t);
-      const i=localStorage.getItem('keu5_in_'+t);
+      const d=localStorage.getItem('keu6_out_'+t);
+      const i=localStorage.getItem('keu6_in_'+t);
       if(d) data[t]=JSON.parse(d);
       if(i) income[t]=JSON.parse(i);
     });
   }catch(e){}
 }
-function saveOut(t){try{localStorage.setItem('keu5_out_'+t,JSON.stringify(data[t]));}catch(e){}}
-function saveIn(t){try{localStorage.setItem('keu5_in_'+t,JSON.stringify(income[t]));}catch(e){}}
+function saveOut(t){try{localStorage.setItem('keu6_out_'+t,JSON.stringify(data[t]));}catch(e){}}
+function saveIn(t){try{localStorage.setItem('keu6_in_'+t,JSON.stringify(income[t]));}catch(e){}}
 
-/* ── Format ── */
 function fmt(n){return 'Rp '+Math.round(n).toLocaleString('id-ID')}
 function fmtDate(s){
   if(!s)return'';
@@ -236,21 +360,13 @@ function fmtShort(s){
 }
 function todayStr(){return new Date().toISOString().split('T')[0];}
 
-/* ── Compute sisa per tanggal ──
-   Semua tanggal dari income & pengeluaran digabung & diurutkan.
-   kasAwal(tgl) = sisa(tgl-1) + sum pemasukan(tgl)
-   sisa(tgl)    = kasAwal(tgl) - sum pengeluaran(tgl)
-*/
 function getAllDates(){
-  const s=new Set([
-    ...income[tab].map(e=>e.tgl),
-    ...data[tab].map(e=>e.tgl)
-  ]);
+  const s=new Set([...income[tab].map(e=>e.tgl),...data[tab].map(e=>e.tgl)]);
   return [...s].sort();
 }
 
 function computeSisa(){
-  const dates=getAllDates();
+  const dates=[...new Set([...income[tab].map(e=>e.tgl),...data[tab].map(e=>e.tgl)])].sort();
   const result={};
   let prevSisa=0;
   dates.forEach(d=>{
@@ -258,13 +374,12 @@ function computeSisa(){
     const kasAwal=prevSisa+masuk;
     const keluar=data[tab].filter(e=>e.tgl===d).reduce((s,e)=>s+e.harga,0);
     const sisa=kasAwal-keluar;
-    result[d]={kasAwal,masuk,keluar,sisa};
+    result[d]={kasAwal,masuk,keluar,sisa,sisaKemarin:prevSisa};
     prevSisa=sisa;
   });
   return result;
 }
 
-/* ── Tambah pemasukan ── */
 function addKas(){
   const tgl=document.getElementById('kas-tgl').value;
   const jml=parseFloat(document.getElementById('kas-jml').value)||0;
@@ -277,13 +392,16 @@ function addKas(){
 }
 
 function delIncome(id){
-  if(!confirm('Hapus pemasukan ini? Saldo akan berkurang sesuai jumlah yang dihapus.'))return;
+  if(!confirm('Hapus pemasukan ini?\nSaldo akan berkurang sesuai jumlah yang dihapus.'))return;
   income[tab]=income[tab].filter(e=>e.id!==id);
-  saveIn(tab);
-  render();
+  saveIn(tab);render();
+}
+function delOut(id){
+  if(!confirm('Hapus pengeluaran ini?'))return;
+  data[tab]=data[tab].filter(e=>e.id!==id);
+  saveOut(tab);render();
 }
 
-/* ── Tab ── */
 function switchTab(t){
   tab=t;filter='all';
   const iS=t==='saldo';
@@ -292,21 +410,18 @@ function switchTab(t){
   document.getElementById('fab').className='fab '+(iS?'s':'c');
   document.getElementById('save-btn').className='save-btn '+(iS?'s':'c');
   document.getElementById('kas-btn').className='kas-add-btn '+(iS?'s':'c');
+  document.getElementById('summary').className='summary'+(iS?'':' cash-mode');
   document.getElementById('sheet-title').textContent='Tambah Pengeluaran '+(iS?'Saldo':'Cash');
   ['inp-tgl','inp-item','inp-harga','kas-tgl','kas-jml'].forEach(id=>{
     document.getElementById(id).className=iS?'fi-s':'fi-c';
   });
   document.getElementById('kas-icon').textContent=iS?'💳':'💵';
   document.getElementById('kas-title').textContent=iS?'Tambah Saldo / Pemasukan':'Tambah Cash Harian';
-  document.getElementById('kas-hint').textContent=iS
-    ?'Sisa hari sebelumnya otomatis terbawa. Riwayat pemasukan bisa dihapus jika salah input.'
-    :'Sisa kemarin otomatis terbawa. Tambah jika ada uang cash masuk baru. Riwayat bisa dihapus.';
   render();
 }
 
 function setFilter(f){filter=f;render();}
 
-/* ── Render ── */
 function render(){
   const computed=computeSisa();
   const dates=Object.keys(computed).sort();
@@ -320,14 +435,13 @@ function render(){
     const sisaAkhir=lastDate?computed[lastDate].sisa:0;
     const totMasuk=income[tab].reduce((s,e)=>s+e.jumlah,0);
     const totKeluar=data[tab].reduce((s,e)=>s+e.harga,0);
-    setSummary('Sisa '+(iS?'Saldo':'Cash'), sisaAkhir, 'Total Kas Masuk', totMasuk, totKeluar, data[tab].length, acColor);
+    setSummary('Sisa '+(iS?'Saldo':'Cash'),sisaAkhir,'Total Kas Masuk',totMasuk,totKeluar,data[tab].length,acColor);
   } else {
     const c=computed[filter]||{kasAwal:0,masuk:0,keluar:0,sisa:0};
-    const trx=data[tab].filter(e=>e.tgl===filter).length;
-    setSummary('Sisa '+(iS?'Saldo':'Cash')+' '+fmtDate(filter), c.sisa, 'Kas Masuk Hari Ini', c.masuk, c.keluar, trx, acColor);
+    setSummary(fmtDate(filter),c.sisa,'Kas Masuk Hari Ini',c.masuk,c.keluar,data[tab].filter(e=>e.tgl===filter).length,acColor);
   }
 
-  // Filter chips
+  // Chips
   const fc=document.getElementById('filter-chips');
   fc.innerHTML=`<div class="chip ${filter==='all'?ac:''}" onclick="setFilter('all')">Semua</div>`;
   dates.forEach(d=>{
@@ -338,26 +452,25 @@ function render(){
   const la=document.getElementById('list-area');
 
   if(filter==='all'){
-    // Semua: 1 baris per tanggal (ringkasan)
     if(dates.length===0){
-      la.innerHTML=`<div class="empty"><div class="empty-icon">${iS?'💳':'💵'}</div><div class="empty-text">Belum ada data.<br>Tambahkan pemasukan & pengeluaran.</div></div>`;
+      la.innerHTML=`<div class="empty"><div class="empty-icon">${iS?'💳':'💵'}</div><div class="empty-text">Belum ada data.<br>Tambahkan pemasukan dulu,<br>lalu catat pengeluaran.</div></div>`;
       return;
     }
     let html='';
     dates.forEach(d=>{
       const c=computed[d];
       const sc=c.sisa>=0?acColor:'var(--danger)';
-      const subParts=[];
-      if(c.masuk>0) subParts.push(`💰 +${fmt(c.masuk)}`);
-      if(c.keluar>0) subParts.push(`💸 −${fmt(c.keluar)}`);
+      const parts=[];
+      if(c.masuk>0) parts.push(`+${fmt(c.masuk)}`);
+      if(c.keluar>0) parts.push(`−${fmt(c.keluar)}`);
       html+=`<div class="all-row" onclick="setFilter('${d}')">
-        <div class="all-row-left">
+        <div>
           <div class="all-row-date">📅 ${fmtDate(d)}</div>
-          <div class="all-row-sub">${subParts.join('  ')}</div>
+          <div class="all-row-sub">${parts.join(' · ')||'Tidak ada transaksi'}</div>
         </div>
         <div class="all-row-right">
           <div class="all-row-sisa" style="color:${sc}">${fmt(c.sisa)}</div>
-          <div class="all-row-arrow">tap untuk detail →</div>
+          <div class="all-row-hint">sisa akhir →</div>
         </div>
       </div>`;
     });
@@ -365,56 +478,48 @@ function render(){
     return;
   }
 
-  // Detail tanggal tertentu
-  const c=computed[filter]||{kasAwal:0,masuk:0,keluar:0,sisa:0};
+  // Detail hari
+  const c=computed[filter]||{kasAwal:0,masuk:0,keluar:0,sisa:0,sisaKemarin:0};
   const dayIncome=income[tab].filter(e=>e.tgl===filter).sort((a,b)=>a.id-b.id);
   const dayOut=data[tab].filter(e=>e.tgl===filter).sort((a,b)=>a.id-b.id);
 
-  if(dayIncome.length===0&&dayOut.length===0){
-    la.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Tidak ada transaksi di tanggal ini.</div></div>`;
+  if(dayIncome.length===0&&dayOut.length===0&&!c.kasAwal){
+    la.innerHTML=`<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">Tidak ada transaksi.<br>Tap ＋ untuk tambah pengeluaran.</div></div>`;
     return;
   }
 
-  let html='';
+  let html=`<div class="sec-label">💰 Pemasukan & Saldo Awal</div>`;
 
-  // Bagian pemasukan
-  if(dayIncome.length>0||(computed[filter]&&c.kasAwal-c.masuk>0)){
-    html+=`<div class="section-label">💰 PEMASUKAN & SALDO AWAL HARI INI</div>`;
-
-    // Sisa terbawa dari kemarin
-    const sisaKemarin=c.kasAwal-c.masuk;
-    if(sisaKemarin>0){
-      html+=`<div class="entry">
-        <div class="entry-icon icon-in">↩️</div>
-        <div class="entry-info">
-          <div class="entry-name">Sisa terbawa dari kemarin</div>
-          <div class="entry-sub">Otomatis</div>
-        </div>
-        <div class="entry-right"><div class="entry-amount amount-in">+${fmt(sisaKemarin)}</div></div>
-      </div>`;
-    }
-
-    dayIncome.forEach(e=>{
-      html+=`<div class="entry">
-        <div class="entry-icon icon-in">💰</div>
-        <div class="entry-info">
-          <div class="entry-name">Kas masuk</div>
-          <div class="entry-sub">Tap 🗑 untuk hapus jika salah input</div>
-        </div>
-        <div class="entry-right"><div class="entry-amount amount-in">+${fmt(e.jumlah)}</div></div>
-        <button class="del-btn" onclick="delIncome(${e.id})" title="Hapus pemasukan ini">🗑</button>
-      </div>`;
-    });
-
-    html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 4px 2px;font-size:12px;color:var(--muted)">
-      <span>Kas awal hari ini</span>
-      <span style="font-weight:700;color:${acColor}">${fmt(c.kasAwal)}</span>
+  if(c.sisaKemarin>0){
+    html+=`<div class="entry">
+      <div class="entry-icon icon-in">↩️</div>
+      <div class="entry-info">
+        <div class="entry-name">Sisa dari kemarin</div>
+        <div class="entry-sub">Otomatis terbawa</div>
+      </div>
+      <div class="entry-right"><div class="entry-amount amt-in">+${fmt(c.sisaKemarin)}</div></div>
     </div>`;
   }
 
-  // Bagian pengeluaran
+  dayIncome.forEach(e=>{
+    html+=`<div class="entry">
+      <div class="entry-icon icon-in">💰</div>
+      <div class="entry-info">
+        <div class="entry-name">Kas masuk</div>
+        <div class="entry-sub" style="color:var(--danger)">Tap 🗑 jika salah input</div>
+      </div>
+      <div class="entry-right"><div class="entry-amount amt-in">+${fmt(e.jumlah)}</div></div>
+      <button class="del-btn" onclick="delIncome(${e.id})">🗑</button>
+    </div>`;
+  });
+
+  html+=`<div class="kas-awal-footer">
+    <span style="color:var(--muted)">Kas awal hari ini</span>
+    <span style="font-weight:700;color:${tab==='saldo'?'var(--saldo)':'var(--cash)'}">${fmt(c.kasAwal)}</span>
+  </div>`;
+
   if(dayOut.length>0){
-    html+=`<div class="section-label" style="margin-top:8px">💸 PENGELUARAN</div>`;
+    html+=`<div class="sec-label">💸 Pengeluaran</div>`;
     let running=c.kasAwal;
     dayOut.forEach(e=>{
       running-=e.harga;
@@ -427,12 +532,12 @@ function render(){
           <div class="entry-name">${e.item}</div>
           <div class="entry-sub" style="color:${sc}">Sisa: ${fmt(running)}</div>
         </div>
-        <div class="entry-right"><div class="entry-amount amount-out">−${fmt(e.harga)}</div></div>
+        <div class="entry-right"><div class="entry-amount amt-out">−${fmt(e.harga)}</div></div>
         <button class="del-btn" onclick="delOut(${e.id})">×</button>
       </div>`;
     });
-  } else if(dayIncome.length>0||c.kasAwal>0){
-    html+=`<div style="text-align:center;padding:14px 0;font-size:13px;color:var(--muted)">Belum ada pengeluaran. Tap ＋ untuk tambah.</div>`;
+  } else {
+    html+=`<div style="text-align:center;padding:18px 0 6px;font-size:13px;color:var(--muted)">Belum ada pengeluaran.<br>Tap ＋ untuk tambah.</div>`;
   }
 
   la.innerHTML=html;
@@ -450,7 +555,6 @@ function setSummary(label,sisa,awalLabel,awal,keluar,trx,acColor){
   document.getElementById('sum-trx').textContent=trx+' item';
 }
 
-/* ── Sheet ── */
 function openSheet(){
   const dates=getAllDates().sort();
   document.getElementById('inp-tgl').value=filter!=='all'?filter:(dates.length?dates[dates.length-1]:todayStr());
@@ -475,19 +579,14 @@ function addEntry(){
   filter=tgl;
   render();
 }
-function delOut(id){
-  if(!confirm('Hapus pengeluaran ini?'))return;
-  data[tab]=data[tab].filter(e=>e.id!==id);
-  saveOut(tab);render();
-}
 
 document.getElementById('kas-tgl').value=todayStr();
 
 setTimeout(()=>{
   const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
-  if(/iPhone|iPad|Android/i.test(navigator.userAgent)&&!standalone&&!localStorage.getItem('keu5_banner')){
+  if(/iPhone|iPad|Android/i.test(navigator.userAgent)&&!standalone&&!localStorage.getItem('keu6_banner')){
     document.getElementById('install-banner').style.display='flex';
-    localStorage.setItem('keu5_banner','1');
+    localStorage.setItem('keu6_banner','1');
   }
 },3000);
 
